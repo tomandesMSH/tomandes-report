@@ -1,4 +1,5 @@
 import { APPS } from './apps.js'
+import type { MessageKey } from './messages.js'
 
 export type Kind = 'bug' | 'idea' | 'question'
 
@@ -24,22 +25,30 @@ function text(value: unknown): string {
   return typeof value === 'string' ? value.replace(/\r\n?/g, '\n').trim() : ''
 }
 
-// The report, or what's wrong with it (in Czech - shown in the form).
-export function validate(body: unknown, now = Date.now()): { report: Report } | { error: string; spam?: true } {
-  if (!body || typeof body !== 'object') return { error: 'Neplatný požadavek.' }
+export interface Invalid {
+  // What's wrong, as a message key (lib/messages.ts) - shown in the reader's language.
+  error: MessageKey
+  field?: keyof typeof LIMITS
+  max?: number
+  spam?: true
+}
+
+// The report, or what's wrong with it.
+export function validate(body: unknown, now = Date.now()): { report: Report } | Invalid {
+  if (!body || typeof body !== 'object') return { error: 'invalid' }
   const b = body as Record<string, unknown>
 
   // The honeypot field is hidden from people; only bots fill it.
-  if (text(b.website) !== '') return { error: 'Hlášení se nepodařilo odeslat.', spam: true }
+  if (text(b.website) !== '') return { error: 'spam', spam: true }
   const startedAt = typeof b.startedAt === 'number' ? b.startedAt : NaN
   if (!Number.isFinite(startedAt) || now - startedAt < MIN_FILL_MS) {
-    return { error: 'Hlášení se nepodařilo odeslat, zkus to prosím znovu.', spam: true }
+    return { error: 'spam', spam: true }
   }
 
   const app = text(b.app)
-  if (!(app in APPS)) return { error: 'Vyber aplikaci.' }
+  if (!(app in APPS)) return { error: 'app' }
   const kind = text(b.kind) as Kind
-  if (!KINDS.includes(kind)) return { error: 'Vyber, o co jde.' }
+  if (!KINDS.includes(kind)) return { error: 'kind' }
 
   const report: Report = {
     app,
@@ -53,10 +62,10 @@ export function validate(body: unknown, now = Date.now()): { report: Report } | 
     contact: text(b.contact).replace(/\s+/g, ' '),
   }
 
-  if (!report.title) return { error: 'Napiš krátký název.' }
-  if (!report.description) return { error: 'Napiš, co se stalo.' }
+  if (!report.title) return { error: 'title' }
+  if (!report.description) return { error: 'description' }
   for (const field of Object.keys(LIMITS) as (keyof typeof LIMITS)[]) {
-    if (report[field].length > LIMITS[field]) return { error: `Text je moc dlouhý (pole ${field}, nejvýš ${LIMITS[field]} znaků).` }
+    if (report[field].length > LIMITS[field]) return { error: 'tooLong', field, max: LIMITS[field] }
   }
   return { report }
 }

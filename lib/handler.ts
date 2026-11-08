@@ -2,6 +2,7 @@ import { APPS, CONTACTS_REPO } from './apps.js'
 import { buildContactIssue, buildIssue } from './issue.js'
 import { createIssue } from './github.js'
 import { validate } from './validate.js'
+import { langOf, message } from './messages.js'
 
 export interface Options {
   token: string | undefined
@@ -38,19 +39,19 @@ export function handleOptions(request: Request, options: Options): Response {
 export async function handleReport(request: Request, options: Options): Promise<Response> {
   const headers = cors(request.headers.get('Origin'), options.allowedOrigins)
   const log = options.log ?? console.error
-  if (!options.token) {
-    log('GITHUB_TOKEN is not set')
-    return json(500, { error: 'Hlášení teď nejde odeslat. Zkus to prosím později.' }, headers)
-  }
-
   let body: unknown
   try {
     body = await request.json()
   } catch {
-    return json(400, { error: 'Neplatný požadavek.' }, headers)
+    return json(400, { error: message('cs', 'invalid') }, headers)
+  }
+  const lang = langOf((body as { lang?: unknown } | null)?.lang)
+  if (!options.token) {
+    log('GITHUB_TOKEN is not set')
+    return json(500, { error: message(lang, 'unavailable') }, headers)
   }
   const result = validate(body, options.now)
-  if ('error' in result) return json(400, { error: result.error }, headers)
+  if ('error' in result) return json(400, { error: message(lang, result.error, result) }, headers)
   const report = result.report
 
   try {
@@ -66,6 +67,6 @@ export async function handleReport(request: Request, options: Options): Promise<
     return json(200, { ok: true, number: issue.number, url: issue.url }, headers)
   } catch (err) {
     log(`report not filed: ${(err as Error).message}`)
-    return json(502, { error: 'Hlášení se nepodařilo uložit. Zkus to prosím za chvíli znovu.' }, headers)
+    return json(502, { error: message(lang, 'failed') }, headers)
   }
 }

@@ -168,6 +168,14 @@ describe('handleReport', () => {
     expect(log).toHaveBeenCalled()
   })
 
+  it('answers in the reader\'s language', async () => {
+    const { fetchImpl } = gitHub()
+    const en = await handleReport(post(form({ title: '', lang: 'en' })), { token: 't', allowedOrigins: [], fetchImpl, now: NOW })
+    expect(await en.json()).toEqual({ error: "Say briefly what it's about." })
+    const cs = await handleReport(post(form({ title: 'x'.repeat(200) })), { token: 't', allowedOrigins: [], fetchImpl, now: NOW })
+    expect(await cs.json()).toEqual({ error: 'Text v poli „Krátce, o co jde“ je moc dlouhý (nejvýš 120 znaků).' })
+  })
+
   it('refuses without a token', async () => {
     const response = await handleReport(post(form()), { token: undefined, allowedOrigins: [], log: () => {} })
     expect(response.status).toBe(500)
