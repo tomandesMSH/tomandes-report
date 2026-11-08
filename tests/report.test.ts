@@ -134,10 +134,11 @@ describe('handleReport', () => {
     expect(JSON.stringify(created[1].body)).toContain('jan@example.com')
   })
 
-  it('gives pupils a plain thank-you, without the GitHub link', async () => {
-    const { fetchImpl } = gitHub()
+  it('answers pupils the same as anyone (the label is the only difference)', async () => {
+    const { calls, fetchImpl } = gitHub()
     const response = await handleReport(post(form({ zus: true })), { token: 't', allowedOrigins: [], fetchImpl, now: NOW })
-    expect(await response.json()).toEqual({ ok: true })
+    expect(await response.json()).toMatchObject({ ok: true, number: 41 })
+    expect((calls.find((c) => c.method === 'POST')!.body as { labels: string[] }).labels).toContain('žák ZUŠ MK')
   })
 
   it('creates missing labels first', async () => {

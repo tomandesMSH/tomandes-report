@@ -63,8 +63,7 @@ export async function handleReport(request: Request, options: Options): Promise<
         log(`contact for ${issue.url} not saved: ${(err as Error).message}`)
       }
     }
-    // Pupils get a plain thank-you; a GitHub page would only confuse.
-    return json(200, report.zus ? { ok: true } : { ok: true, number: issue.number, url: issue.url }, headers)
+    return json(200, { ok: true, number: issue.number, url: issue.url }, headers)
   } catch (err) {
     log(`report not filed: ${(err as Error).message}`)
     return json(502, { error: 'Hlášení se nepodařilo uložit. Zkus to prosím za chvíli znovu.' }, headers)

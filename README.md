@@ -6,7 +6,9 @@ Formulář [tomandes.eu/report](https://tomandes.eu/report/) posílá hlášení
 - **Které aplikace a kam:** `lib/apps.ts`. Repo se bere jen odtud, nikdy z požadavku.
 - **Veřejné issue:**
   - název `[Chyba] …` / `[Nápad] …` / `[Otázka] …`;
-  - štítky `nahlášeno z webu`, `bug` / `enhancement` / `question`, u žáků `žák ZUŠ MK`. Chybějící štítky se založí samy.
+  - štítky `nahlášeno z webu`, `bug` / `enhancement` / `question`, u žáků `žák ZUŠ MK` (zaškrtávátko „Jsem žákem ZUŠ
+    Moravský Krumlov“ u Keyboard Utils a Muzia; jinak se formulář ani odpověď pro žáky nijak neliší). Chybějící štítky
+    se založí samy.
 - **Kontakt** (nepovinný) nikdy nejde do veřejného issue, ale do **soukromého** repa `report-contacts` s odkazem na
   hlášení. GitHub o něm pošle e-mail jako o každém issue.
 - **Ochrana:**
