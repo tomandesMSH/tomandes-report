@@ -1,0 +1,18 @@
+{
+  "name": "tomandes-report",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Reports from tomandes.eu/report become GitHub issues in the apps' repositories.",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsx dev/server.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}
