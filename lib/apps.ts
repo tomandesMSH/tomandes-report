@@ -12,7 +12,7 @@ export const OWNER = 'tomandesMSH'
 
 export const APPS: Record<string, App> = {
   'keyboard-utils': { name: 'Keyboard Utils', repo: 'Keyboard-Utils', zus: true },
-  'keyboard-hero': { name: 'Keyboard Hero / Muzio', repo: 'Keyboard-Hero', zus: true },
+  'keyboard-hero': { name: 'Muzio', repo: 'Muzio', zus: true },
   kaspar: { name: 'KASPAR', repo: 'KASPAR', zus: false },
   'custom-autoplay': { name: 'Custom-AutoPlay', repo: 'Custom-AutoPlay', zus: false },
   'soundpad-translator': { name: 'Soundpad Translator', repo: 'SoundpadTranslator', zus: false },

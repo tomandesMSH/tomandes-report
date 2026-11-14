@@ -22,7 +22,7 @@ Formulář [tomandes.eu/report](https://tomandes.eu/report/) posílá hlášení
 2. **Token:** GitHub → *Settings → Developer settings → Personal access tokens → Fine-grained tokens →
    Generate new token*:
    - **Repository access:** *Only select repositories*, vyber:
-     - Keyboard-Utils, Keyboard-Hero, KASPAR, Custom-AutoPlay, SoundpadTranslator, ClipThat, tomandesMSH,
+     - Keyboard-Utils, Muzio, KASPAR, Custom-AutoPlay, SoundpadTranslator, ClipThat, tomandesMSH,
      - report-contacts;
    - **Permissions → Repository permissions → Issues: Read and write**. Nic jiného;
    - **Expiration:** max. 1 rok. Než vyprší, vygeneruj nový a vyměň ho na Vercelu.
