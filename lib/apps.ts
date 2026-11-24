@@ -4,7 +4,7 @@
 export interface App {
   name: string
   repo: string
-  // Offers "Jsem žákem ZUŠ Moravský Krumlov" (the apps the school uses).
+  // Offers "Jsem žákem základní umělecké školy." (the apps pupils use).
   zus: boolean
 }
 

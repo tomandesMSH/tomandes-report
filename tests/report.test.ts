@@ -64,7 +64,7 @@ describe('buildIssue', () => {
   })
 
   it('marks pupils and maps ideas and questions', () => {
-    expect(buildIssue(report({ zus: true })).labels).toContain('žák ZUŠ MK')
+    expect(buildIssue(report({ zus: true })).labels).toContain('žák ZUŠ')
     expect(buildIssue(report({ kind: 'idea' })).labels).toContain('enhancement')
     expect(buildIssue(report({ kind: 'question' })).title).toMatch(/^\[Otázka\]/)
   })
@@ -138,7 +138,7 @@ describe('handleReport', () => {
     const { calls, fetchImpl } = gitHub()
     const response = await handleReport(post(form({ zus: true })), { token: 't', allowedOrigins: [], fetchImpl, now: NOW })
     expect(await response.json()).toMatchObject({ ok: true, number: 41 })
-    expect((calls.find((c) => c.method === 'POST')!.body as { labels: string[] }).labels).toContain('žák ZUŠ MK')
+    expect((calls.find((c) => c.method === 'POST')!.body as { labels: string[] }).labels).toContain('žák ZUŠ')
   })
 
   it('creates missing labels first', async () => {
